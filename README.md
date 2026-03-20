@@ -4,11 +4,19 @@ A collection of specialized skills for AI coding agents, designed to enhance cod
 
 ## Overview
 
-This repository contains skills for AI coding agents in the `npx skills`-compatible layout:
+This repository contains skills for AI coding agents.
+
+### `npx skills`-discoverable (installed automatically)
 
 ```
 skills/
-  thinkingpatterns/SKILL.md    — MCP platform integration
+  thinkingpatterns/SKILL.md    — MCP + CLI platform integration
+```
+
+### Scanning agents (not auto-installed)
+
+```
+scanning-agents/
   security-deep-analysis/SKILL.md — Contextual security analysis
   architecture-review/SKILL.md    — Structural health analysis
   reliability-review/SKILL.md     — Error handling & resilience
@@ -17,7 +25,7 @@ skills/
 
 ## Installation
 
-Install all skills into your coding agent with a single command:
+Install the ThinkingPatterns skill into your coding agent:
 
 ```bash
 npx skills add thinkingpatternsai/skills -a claude-code -y
@@ -25,15 +33,17 @@ npx skills add thinkingpatternsai/skills -a claude-code -y
 
 Replace `claude-code` with your agent slug (`cursor`, `copilot`, `codex`, `antigravity`).
 
+Only the `skills/` directory is discovered by `npx skills`. Scanning agents in `scanning-agents/` are used internally by the platform via the `run_agent` API.
+
 ## Skills
 
-### ThinkingPatterns (MCP Integration)
+### ThinkingPatterns
 
-Teaches coding agents how to interact with the ThinkingPatterns platform via MCP tools — list/fix/triage findings, trigger scans, manage agents.
+Teaches coding agents how to interact with the ThinkingPatterns platform via CLI (`tp` commands) and MCP tools — list/fix/triage findings, trigger scans, manage agents. Prefers CLI when available (10-32x cheaper in tokens).
 
 ### Scanning Agents
 
-Deep code analysis skills that go beyond traditional static analysis. Each produces SARIF-compatible findings.
+Deep code analysis skills that go beyond traditional static analysis. Each produces SARIF-compatible findings. These are **not** installed by `npx skills` — they are executed server-side via `run_agent`.
 
 | Skill | Category | Purpose |
 |-------|----------|---------|
