@@ -10,7 +10,8 @@ This repository contains skills for AI coding agents.
 
 ```
 skills/
-  thinkingpatterns/SKILL.md    — MCP + CLI platform integration
+  thinkingpatterns/SKILL.md        — MCP + CLI platform integration (CLI-preferred)
+  thinkingpatterns-mcp/SKILL.md    — MCP + CLI platform integration (MCP-preferred)
 ```
 
 ### Scanning agents (not auto-installed)
@@ -28,7 +29,11 @@ scanning-agents/
 Install the ThinkingPatterns skill into your coding agent:
 
 ```bash
-npx skills add thinkingpatternsai/skills -a claude-code -y
+# CLI-preferred (default)
+npx skills add thinkingpatternsai/skills -s thinkingpatterns -a claude-code -y
+
+# MCP-preferred (for MCP-first setups)
+npx skills add thinkingpatternsai/skills -s thinkingpatterns-mcp -a claude-code -y
 ```
 
 Replace `claude-code` with your agent slug (`cursor`, `copilot`, `codex`, `antigravity`).
@@ -37,9 +42,12 @@ Only the `skills/` directory is discovered by `npx skills`. Scanning agents in `
 
 ## Skills
 
-### ThinkingPatterns
+### ThinkingPatterns (two variants)
 
-Teaches coding agents how to interact with the ThinkingPatterns platform via CLI (`tp` commands) and MCP tools — list/fix/triage findings, trigger scans, manage agents. Prefers CLI when available (10-32x cheaper in tokens).
+Teaches coding agents how to interact with the ThinkingPatterns platform via CLI (`tp` commands) and MCP tools — list/fix/triage findings, trigger scans, manage agents.
+
+- **`thinkingpatterns`** — Prefers CLI when available (10-32x cheaper in tokens). Best for CLI-first setups.
+- **`thinkingpatterns-mcp`** — Prefers MCP tools when available (structured protocol, rich schemas). Best for MCP-first setups.
 
 ### Scanning Agents
 
