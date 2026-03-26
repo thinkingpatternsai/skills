@@ -33,7 +33,7 @@ Before starting, determine which interface is available:
 
 | Operation | MCP tool | CLI command |
 |-----------|----------|-------------|
-| List findings | `list_findings` | `tp findings list --project <id> [--severity critical] [--status open] [--module-path src/]` |
+| List findings | `list_findings` | `tp findings list --project <id> [--severity critical] [--status open] [--verbose]` |
 | Get finding detail | `get_finding` | `tp findings get <finding-id>` |
 | Triage a finding | `triage_finding` | `tp findings triage <finding-id> --action accept [--reason "..."]` |
 | Bulk triage | `bulk_triage` | `tp findings bulk-triage --ids <id1,id2,...> --action dismiss --reason "..."` |
@@ -42,7 +42,7 @@ Before starting, determine which interface is available:
 | Get metrics | `get_metrics` | `tp metrics --project <id>` |
 | Top risk modules | `get_top_risk_modules` | `tp risk-modules --project <id> [--limit 10]` |
 | List runs | `list_runs` | `tp runs list --project <id>` |
-| Ingest SARIF | `ingest_sarif` | `tp ingest sarif --project <id> --file results.sarif` |
+| Ingest SARIF | `ingest_sarif` | `tp ingest sarif --project <id> --file results.sarif [--branch <name>]` |
 | List agents | `list_agents` | `tp agents list` |
 | Get agent | `get_agent` | `tp agents get <agent-id>` |
 | Create agent | `create_agent` | `tp agents create --name "Name" --slug name --skill-md ./SKILL.md` |
@@ -71,8 +71,8 @@ tp findings get <finding-id>   # for each critical finding
 
 ### Fix findings
 
-1. List open findings: `tp findings list --project <id> --status open` or `list_findings`
-2. For each finding, get details: `tp findings get <id>` or `get_finding`
+1. List open findings: `tp findings list --project <id> --status open` or `list_findings` (returns summaries)
+2. For each finding, get full details: `tp findings get <id>` or `get_finding` (includes description, remediation_text, etc.)
 3. Read the code at `code_location_file`:`code_location_line_start`, understand the issue
 4. Apply the minimal fix that resolves the root cause
 5. Comment what was changed: `tp findings comment <id> --body "..."` or `add_comment`
@@ -108,7 +108,7 @@ tp findings list --project <id> --severity critical > critical-findings.json
 1. Discover agents: `tp agents list` or `list_agents`
 2. Run the agent: `tp agents run <agent-id> --project <id>` or `run_agent`
 3. Follow the returned SKILL.md workflow step by step, using available tools
-4. When done, ingest results: `tp ingest sarif --project <id> --file results.sarif` or `ingest_sarif`
+4. When done, ingest results: `tp ingest sarif --project <id> --file results.sarif --branch <branch>` or `ingest_sarif` (include `branch` parameter)
 
 ### Manage agents
 
@@ -124,6 +124,7 @@ tp findings list --project <id> --severity critical > critical-findings.json
 - Findings have `code_location_file` and `code_location_line_start` fields — use these to navigate to affected code
 - Metrics include MTTR (mean time to resolution in days), fix_rate_7d (percentage), and rework_ratio (findings reopened)
 - Triage decisions (accept, dismiss, defer, reopen) are handled by humans — focus on scanning and fixing
+- `tp findings list` returns summary fields by default (id, title, severity, status, category, file, line, first_seen_at). Use `--verbose` for all fields. `tp findings get <id>` always returns full detail
 - CLI outputs JSON by default, making it easy to pipe to `jq` or other tools
 - Run `tp login` to authenticate once — credentials are saved to `~/.thinkingpatterns/credentials.json`
 - CLI commands also accept `--api-key` flag or `TP_API_KEY` env var as overrides (useful for CI/CD)
